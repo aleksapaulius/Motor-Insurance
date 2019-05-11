@@ -55,6 +55,10 @@ mdata <- mdata[-which(mdata[,'fuel_type'] == 'NULL'), ]
 ### Correlation
 source("01_correlation.R")
 
+source("test.R")
+source("test.R", print = T)
+source("test.R", print.eval = T)
+
 
 ### Model
 source("02_model.R")

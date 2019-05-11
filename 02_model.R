@@ -6,7 +6,7 @@ names(model.stat) <- c('RSE', 'Adjusted R-squared', 'F-Statistic', 'any-aliased'
 ### Linear model
 
 # MODEL 1
-lm.regressors1 <- setdiff(names(mdata), c('claim_count', 'policy_desc'))
+lm.regressors1 <- setdiff(names(mdata), c('claim_count'))
 f1 <- as.formula(paste("claim_count ~ ", paste(lm.regressors1, collapse=" + ")))
 fit1 <- lm(f1, data = mdata)
 summary(fit1)
@@ -17,7 +17,7 @@ model.stat.fit1$`F-Statistic` <- summary(fit1)$fstatistic[1]
 model.stat.fit1$`any-aliased` <- any(summary(fit1)$aliased)
 
 # MODEL 2
-lm.regressors2 <- setdiff(names(mdata), c('claim_count', 'policy_desc', 'population_density', 'vehicle_hp'))
+lm.regressors2 <- setdiff(names(mdata), c('claim_count', 'population_density', 'vehicle_hp'))
 f2 <- as.formula(paste("claim_count ~ ", paste(lm.regressors2, collapse=" + ")))
 fit2 <- lm(f2, data = mdata)
 summary(fit2) # higher F-Statistic shows stronger relashionship between exogenic and endogenic variables
@@ -31,11 +31,12 @@ model.stat.fit2$`any-aliased` <- any(summary(fit2)$aliased)
 ### Poisson regression
 
 # MODEL 3
-pr.regressors3 <- setdiff(names(mdata), c('claim_count', 'policy_desc'))
+pr.regressors3 <- setdiff(names(mdata), c('claim_count'))
 f3 <- as.formula(paste("claim_count ~ ", paste(pr.regressors3, collapse=" + ")))
 fit3 <- glm(f3, mdata, family = poisson(link = "log"))
 summary(fit3)
 
+# MODEL 3
 f4 <- f3
 fit4 <- glm(f4, mdata, family = quasipoisson(link = "log"))
 summary(fit4)
@@ -50,11 +51,15 @@ models.both
 
 
 # Predicting From The Model
-#predict(fit4, newdata = newdata, type = "response")
+#modeling.data <- mdata[,setdiff(names(mdata), c('claim_count'))]
+#predict(fit3, newdata = modeling.data, type = "response")
+#table(round(predict(fit3, newdata = modeling.data, type = "response"), 0))
+
+
 
 # Visualizing
-plot_summs(fit4, scale = TRUE, exp = TRUE)
-plot_summs(fit3, fit4, scale = TRUE, exp = TRUE)
+#plot_summs(fit4, scale = TRUE, exp = TRUE)
+#plot_summs(fit3, fit4, scale = TRUE, exp = TRUE)
 
 
 
